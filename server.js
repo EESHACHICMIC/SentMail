@@ -27,8 +27,20 @@ var Storage = multer.diskStorage({
     }
 })
 
+const maxSize =1024 * 1024;
+
 var upload = multer({
-    storage: Storage
+    storage: Storage,
+    fileFilter: function (req, file, callback) {
+        if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+            callback(null,true)
+        }
+        else {
+            callback(null, false)
+            return callback(new Error(`Only JPEG,JPG and PNG is allowed`))
+        }
+    },
+    limits:{fileSize:maxSize}
 });
 
 
