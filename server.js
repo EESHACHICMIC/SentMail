@@ -1,5 +1,6 @@
 const express = require('express')
 const mail = require('./malier')
+const multer = require('multer')
 var nodemailer = require('nodemailer')
 const bodyParser = require('body-parser');
 const sentConfirmationMail = require('./malier');
@@ -17,13 +18,27 @@ app.get('/', (req, res) => {
     })
 })
 
+var Storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './images')
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + " " + Date.now() + " " + file.originalname)
+    }
+})
 
-app.post('/mail', async(req, res) => {
+var upload = multer({
+    storage: Storage
+});
+
+
+app.post('/mail', upload.single('image'), async (req, res) => {
 
     const sendmail = {
         mailReceiver: req.body.email,
         subject: req.body.subject,
-        text: `Congratulation! ${req.body.name} You are successfully Registerd, Kindly ignore this mail because i am integrating this email service with my node js application`
+        text: `Congratulation! ${req.body.name} You are successfully Registerd, Kindly ignore this mail because i am integrating this email service with my node js application`,
+        path: req.file.path
     }
 
     await sentConfirmationMail(sendmail)

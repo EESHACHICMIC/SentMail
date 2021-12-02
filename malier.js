@@ -1,4 +1,5 @@
 var nodemailer = require('nodemailer')
+const path=require('path')
 
 const sentConfirmationMail = async(sendmail) => {
     var transport = await nodemailer.createTransport(
@@ -16,7 +17,13 @@ const sentConfirmationMail = async(sendmail) => {
         from: 'md.eesha418@gmail.com',
         to: sendmail.mailReceiver,
         subject: sendmail.subject,
-        text: sendmail.text
+        text: sendmail.text,
+        attachments: [
+            {
+                path: sendmail.path
+            }
+            
+        ]
     }
 
   await transport.sendMail(mailOption, function (error, info) {
