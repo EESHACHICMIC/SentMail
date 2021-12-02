@@ -23,8 +23,7 @@ app.post('/mail', async(req, res) => {
     const sendmail = {
         mailReceiver: req.body.email,
         subject: req.body.subject,
-        text: `Congratulation! ${req.body.name} You are successfully Registerd, Kindly ignore this mail
-        because i am integrating this email service with my node js application`
+        text: `Congratulation! ${req.body.name} You are successfully Registerd, Kindly ignore this mail because i am integrating this email service with my node js application`
     }
 
     await sentConfirmationMail(sendmail)
